@@ -35,7 +35,7 @@ public class MessageConfigurationBase {
     
     @Bean
     public ConnectionFactory connectionFactory(){
-    	String brokerURL = "amqp://" + consumerBase.getHostName() + ":" + consumerBase.getPort(); 
+    	String brokerURL = "tcp://" + consumerBase.getHostName() + ":" + consumerBase.getPort(); 
 		
 //    	String brokerURL = "failover:(tcp://" + consumerBase.getHostName() + ":" + consumerBase.getPort() 
 //    			+ ",tcp://" + consumerBase.getHostNameFailover() + ":" + consumerBase.getPortFailover() + ")?maxReconnectAttempts=3"; 
