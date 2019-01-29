@@ -18,6 +18,7 @@ package com.avianca.esb.resttoamq.routes;
 import org.springframework.stereotype.Component;
 
 import com.avianca.esb.resttoamq.configurador.ConfigurationRoute;
+import com.avianca.esb.resttoamq.service.OrderGenerator;
 
 
 @Component
@@ -29,7 +30,10 @@ public class TransformationRouteBase extends ConfigurationRoute {
 		from("direct:transformationRouteBase").id("resttoamq_transformation")
 			//.bean("transformationComponent", "transformation")
 //			.marshal(dataFormat)
+			.setHeader("Exchange.FILE_NAME").method(OrderGenerator.class, "generateFileName")
+			.bean(OrderGenerator.class, "generateOrder")
 			.log("{id} - Sending to producer")
-			.to("direct:amqProducerRouteBase").end();
+			.to("direct:amqProducerRouteBase")
+		.end();
 	}
 }
