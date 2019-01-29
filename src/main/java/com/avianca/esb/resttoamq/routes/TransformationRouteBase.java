@@ -27,7 +27,7 @@ public class TransformationRouteBase extends ConfigurationRoute {
 		super.configure();
 		//Here is where you need make all the process in the route.
 		from("direct:transformationRouteBase").id("resttoamq_transformation")
-			.bean("transformationComponent", "transformation")
+			//.bean("transformationComponent", "transformation")
 			.log("{id} - Sending to producer")
 			.to("direct:amqProducerRouteBase").end();
 	}
