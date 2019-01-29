@@ -58,7 +58,7 @@ public class RestConsumerRouteBase extends ConfigurationRoute {
         .get("{id}").outType(Order.class)
             .to("bean:orderService?method=getOrder(${header.id})")
             // need to specify the POJO types the binding is using (otherwise json binding defaults to Map based)
-        .post().type(Order.class)
+        .post()//.type(Order.class)
         	.to("direct:transformationRouteBase")
             //.to("bean:orderService?method=createOrder")
             // need to specify the POJO types the binding is using (otherwise json binding defaults to Map based)
