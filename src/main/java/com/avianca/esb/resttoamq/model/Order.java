@@ -15,9 +15,15 @@
  */
 package com.avianca.esb.resttoamq.model;
 
-public class Order {
+import java.io.Serializable;
 
-    private int id;
+public class Order implements Serializable{
+
+    /**
+	 * 
+	 */
+	private static final long serialVersionUID = -1363156344456726375L;
+	private int id;
     private String item;
     private int amount;
     private String description;
