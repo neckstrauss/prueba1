@@ -1,0 +1,6 @@
+eclipse.preferences.version=1
+org.jboss.tools.openshift.Connection=https\://narango-assertsolutions.com@master.na39.openshift.opentlc.com
+org.jboss.tools.openshift.DeployProject=resttoamq
+org.jboss.tools.openshift.PodPath=
+org.jboss.tools.openshift.Service=pruebaresttoamq@broker-amq-tcp
+org.jboss.tools.openshift.SourcePath=${workspace_loc\:/resttoamq}

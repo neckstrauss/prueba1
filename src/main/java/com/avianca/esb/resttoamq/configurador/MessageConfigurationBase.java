@@ -16,13 +16,17 @@
 package com.avianca.esb.resttoamq.configurador;
 import javax.jms.ConnectionFactory;
 
+import org.apache.activemq.RedeliveryPolicy;
+import org.apache.activemq.camel.component.ActiveMQComponent;
 import org.apache.activemq.spring.ActiveMQConnectionFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.jms.connection.JmsTransactionManager;
 import org.springframework.jms.core.JmsTemplate;
 import org.springframework.jms.support.converter.MessageConverter;
 import org.springframework.jms.support.converter.SimpleMessageConverter;
+import org.springframework.transaction.PlatformTransactionManager;
 
 import com.avianca.esb.resttoamq.properties.AmqpProducerBase;
 
@@ -39,27 +43,35 @@ public class MessageConfigurationBase {
 		
 //    	String brokerURL = "failover:(tcp://" + consumerBase.getHostName() + ":" + consumerBase.getPort() 
 //    			+ ",tcp://" + consumerBase.getHostNameFailover() + ":" + consumerBase.getPortFailover() + ")?maxReconnectAttempts=3"; 
-		ActiveMQConnectionFactory connectionFactory = new ActiveMQConnectionFactory();
+    	ActiveMQConnectionFactory connectionFactory = new ActiveMQConnectionFactory();
 		connectionFactory.setBrokerURL(brokerURL);
         connectionFactory.setUserName(consumerBase.getUser());
         connectionFactory.setPassword(consumerBase.getPasswd());
-
+        
+        RedeliveryPolicy policy = connectionFactory.getRedeliveryPolicy();
+        policy.setInitialRedeliveryDelay(15000);
+        policy.setBackOffMultiplier(2);
+        policy.setUseExponentialBackOff(true);
+        policy.setMaximumRedeliveries(10);
         return connectionFactory;
     }
 
-    /*
-     * Used for Sending Messages.
-     */
-    @Bean
-    public JmsTemplate jmsTemplate(){
-        JmsTemplate template = new JmsTemplate();
-        template.setConnectionFactory(connectionFactory());
-        template.setPubSubDomain(true); // false for a Queue, true for a Topic
-        return template;
-    }
-
-    @Bean
-    MessageConverter converter(){
-        return new SimpleMessageConverter();
-    }
+      
+	@Bean(name = "activemq-component")
+	public ActiveMQComponent amqpComponent() 
+	{		
+		ActiveMQComponent ampqComp= new ActiveMQComponent();
+		ampqComp.setTransacted(true);
+		ampqComp.setTransactionManager(txManager());
+		ampqComp.setCacheLevelName("CACHE_CONSUMER");
+		ampqComp.setConnectionFactory(connectionFactory());
+		return ampqComp;
+	}
+    
+    @Bean 
+    public PlatformTransactionManager  txManager()
+	{
+		JmsTransactionManager jmsTransactionManager = new JmsTransactionManager(connectionFactory());
+		return jmsTransactionManager;
+	}
 }
