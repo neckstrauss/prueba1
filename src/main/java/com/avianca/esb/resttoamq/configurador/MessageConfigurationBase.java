@@ -38,7 +38,7 @@ public class MessageConfigurationBase {
     public ConnectionFactory connectionFactory(){
     	String brokerURL;
     	
-    	if(consumerBase.getHostNameFailover() == null || consumerBase.getHostName().equals(""))
+    	if(consumerBase.getHostNameFailover() == null || consumerBase.getHostNameFailover().equals(""))
     	{
     		brokerURL = "tcp://" + consumerBase.getHostName() + ":" + consumerBase.getPort(); 
     	}
