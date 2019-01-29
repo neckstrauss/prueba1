@@ -23,49 +23,53 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.jms.connection.JmsTransactionManager;
-import org.springframework.jms.core.JmsTemplate;
-import org.springframework.jms.support.converter.MessageConverter;
-import org.springframework.jms.support.converter.SimpleMessageConverter;
 import org.springframework.transaction.PlatformTransactionManager;
 
-import com.avianca.esb.resttoamq.properties.AmqpProducerBase;
+import com.avianca.esb.resttoamq.properties.AmqProducerBase;
 
 
 @Configuration
 public class MessageConfigurationBase {
 
     @Autowired
-    private AmqpProducerBase consumerBase;
+    private AmqProducerBase consumerBase;
     
     @Bean
     public ConnectionFactory connectionFactory(){
-    	String brokerURL = "tcp://" + consumerBase.getHostName() + ":" + consumerBase.getPort(); 
-		
-//    	String brokerURL = "failover:(tcp://" + consumerBase.getHostName() + ":" + consumerBase.getPort() 
-//    			+ ",tcp://" + consumerBase.getHostNameFailover() + ":" + consumerBase.getPortFailover() + ")?maxReconnectAttempts=3"; 
+    	String brokerURL;
+    	
+    	if(consumerBase.getHostNameFailover() == null || consumerBase.getHostName().equals(""))
+    	{
+    		brokerURL = "tcp://" + consumerBase.getHostName() + ":" + consumerBase.getPort(); 
+    	}
+    	else
+    	{
+    		brokerURL = "failover:(tcp://" + consumerBase.getHostName() + ":" + consumerBase.getPort() 
+			+ ",tcp://" + consumerBase.getHostNameFailover() + ":" + consumerBase.getPortFailover() + ")?maxReconnectAttempts=3"; 
+    	}	
+    	
     	ActiveMQConnectionFactory connectionFactory = new ActiveMQConnectionFactory();
 		connectionFactory.setBrokerURL(brokerURL);
         connectionFactory.setUserName(consumerBase.getUser());
         connectionFactory.setPassword(consumerBase.getPasswd());
         
         RedeliveryPolicy policy = connectionFactory.getRedeliveryPolicy();
-        policy.setInitialRedeliveryDelay(15000);
-        policy.setBackOffMultiplier(2);
-        policy.setUseExponentialBackOff(true);
-        policy.setMaximumRedeliveries(10);
+        policy.setInitialRedeliveryDelay(consumerBase.getInitialRedeliveryDelay());
+        policy.setBackOffMultiplier(consumerBase.getBackOffMultiplier());
+        policy.setUseExponentialBackOff(consumerBase.isUseExponentialBackOff());
+        policy.setMaximumRedeliveries(consumerBase.getMaximumRedeliveries());
         return connectionFactory;
     }
-
       
 	@Bean(name = "activemq-component")
-	public ActiveMQComponent amqpComponent() 
+	public ActiveMQComponent amqpComponent()
 	{		
-		ActiveMQComponent ampqComp= new ActiveMQComponent();
-		ampqComp.setTransacted(true);
-		ampqComp.setTransactionManager(txManager());
-		ampqComp.setCacheLevelName("CACHE_CONSUMER");
-		ampqComp.setConnectionFactory(connectionFactory());
-		return ampqComp;
+		ActiveMQComponent amqComp= new ActiveMQComponent();
+		amqComp.setTransacted(consumerBase.isTransacted());
+		amqComp.setTransactionManager(txManager());
+		amqComp.setCacheLevelName("CACHE_CONSUMER");
+		amqComp.setConnectionFactory(connectionFactory());
+		return amqComp;
 	}
     
     @Bean 

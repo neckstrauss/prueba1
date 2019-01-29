@@ -26,17 +26,30 @@ public class ConfigurationRoute extends RouteBuilder {
 	@Value("${track}")
 	private Boolean track;
 	
+	@Value("${maximumRedeliveries}")
+	private int maximumRedeliveries;
+	
+	@Value("${redeliveryDelay}")
+	private int redeliveryDelay;
+	
+	@Value("${uriEndPointDLQ}")
+	private String uriEndPointDLQ;
+	
+	@Value("${errorHandle}")
+	private Boolean errorHandle;
+	
+	
 	@Override
 	public void configure() throws Exception {
 		// TODO Auto-generated method stub
 		getContext().setTracing(track);
 		
 		onException(Exception.class)
-		.maximumRedeliveries(5)
-		.redeliveryDelay(2000)
-		.handled(true) 
+		.maximumRedeliveries(maximumRedeliveries)
+		.redeliveryDelay(redeliveryDelay)
+		.handled(errorHandle) 
 		.process(new FailureErrorProcessor())
-	    .to("log:ERROR-CAPTURADO")
+	    .to(uriEndPointDLQ)
 	    ;
 	}
 

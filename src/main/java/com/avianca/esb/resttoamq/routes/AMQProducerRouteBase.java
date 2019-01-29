@@ -17,14 +17,14 @@ package com.avianca.esb.resttoamq.routes;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
-import com.avianca.esb.resttoamq.properties.AmqpProducerBase;
+import com.avianca.esb.resttoamq.properties.AmqProducerBase;
 import com.avianca.esb.resttoamq.configurador.ConfigurationRoute;
 
 @Component
-public class AMQPProducerRouteBase extends ConfigurationRoute {
+public class AMQProducerRouteBase extends ConfigurationRoute {
 
 	@Autowired
-	private AmqpProducerBase amqpProducerConfig;
+	private AmqProducerBase amqpProducerConfig;
 
 	public void configure() throws Exception {
 		super.configure();

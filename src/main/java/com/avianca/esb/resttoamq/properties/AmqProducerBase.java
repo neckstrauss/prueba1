@@ -22,7 +22,7 @@ import org.springframework.context.annotation.Configuration;
 @Configuration
 @PropertySource("classpath:amq_prod_base.properties")
 @ConfigurationProperties(prefix = "amq")
-public class AmqpProducerBase {
+public class AmqProducerBase {
 	
 	private String hostName;
 	
@@ -37,6 +37,17 @@ public class AmqpProducerBase {
 	private String hostNameFailover;
 	
 	private String portFailover;
+	
+	private boolean transacted;
+	
+	private int initialRedeliveryDelay;
+	
+	private Long backOffMultiplier;
+	
+	private boolean useExponentialBackOff;
+	
+	private int maximumRedeliveries;
+	
 	
 	public String getHostNameFailover() {
 		return hostNameFailover;
@@ -93,4 +104,46 @@ public class AmqpProducerBase {
 	public void setQueueName(String queueName) {
 		this.queueName = queueName;
 	}
+
+	public boolean isTransacted() {
+		return transacted;
+	}
+
+	public void setTransacted(boolean transacted) {
+		this.transacted = transacted;
+	}
+
+	public int getInitialRedeliveryDelay() {
+		return initialRedeliveryDelay;
+	}
+
+	public void setInitialRedeliveryDelay(int initialRedeliveryDelay) {
+		this.initialRedeliveryDelay = initialRedeliveryDelay;
+	}
+
+	public Long getBackOffMultiplier() {
+		return backOffMultiplier;
+	}
+
+	public void setBackOffMultiplier(Long backOffMultiplier) {
+		this.backOffMultiplier = backOffMultiplier;
+	}
+
+	public boolean isUseExponentialBackOff() {
+		return useExponentialBackOff;
+	}
+
+	public void setUseExponentialBackOff(boolean useExponentialBackOff) {
+		this.useExponentialBackOff = useExponentialBackOff;
+	}
+
+	public int getMaximumRedeliveries() {
+		return maximumRedeliveries;
+	}
+
+	public void setMaximumRedeliveries(int maximumRedeliveries) {
+		this.maximumRedeliveries = maximumRedeliveries;
+	}
+	
+	
 }

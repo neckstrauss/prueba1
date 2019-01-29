@@ -18,7 +18,6 @@ package com.avianca.esb.resttoamq.routes;
 import org.springframework.stereotype.Component;
 
 import com.avianca.esb.resttoamq.configurador.ConfigurationRoute;
-import com.avianca.esb.resttoamq.service.OrderGenerator;
 
 
 @Component
