@@ -29,6 +29,6 @@ public class TransformationRouteBase extends ConfigurationRoute {
 		from("direct:transformationRouteBase").id("resttoamq_transformation")
 			.bean("transformationComponent", "transformation")
 			.log("{id} - Sending to producer")
-			.to("direct:processAMQBase").end();
+			.to("direct:amqProducerRouteBase").end();
 	}
 }

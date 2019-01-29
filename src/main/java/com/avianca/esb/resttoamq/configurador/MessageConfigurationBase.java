@@ -35,10 +35,10 @@ public class MessageConfigurationBase {
     
     @Bean
     public ConnectionFactory connectionFactory(){
-//    	String brokerURL = "tcp://" + consumerBase.getHostName() + ":" + consumerBase.getPort(); 
+    	String brokerURL = "amqp://" + consumerBase.getHostName() + ":" + consumerBase.getPort(); 
 		
-    	String brokerURL = "failover:(tcp://" + consumerBase.getHostName() + ":" + consumerBase.getPort() 
-    			+ ",tcp://" + consumerBase.getHostNameFailover() + ":" + consumerBase.getPortFailover() + ")?maxReconnectAttempts=3"; 
+//    	String brokerURL = "failover:(tcp://" + consumerBase.getHostName() + ":" + consumerBase.getPort() 
+//    			+ ",tcp://" + consumerBase.getHostNameFailover() + ":" + consumerBase.getPortFailover() + ")?maxReconnectAttempts=3"; 
 		ActiveMQConnectionFactory connectionFactory = new ActiveMQConnectionFactory();
 		connectionFactory.setBrokerURL(brokerURL);
         connectionFactory.setUserName(consumerBase.getUser());

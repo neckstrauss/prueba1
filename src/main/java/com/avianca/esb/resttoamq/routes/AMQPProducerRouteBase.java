@@ -29,7 +29,7 @@ public class AMQPProducerRouteBase extends ConfigurationRoute {
 	public void configure() throws Exception {
 		super.configure();
 		// context().setStreamCaching(true);
-		from("direct:processAMQPBase").routeId("resttoamq_amqp_producer")
+		from("direct:amqProducerRouteBase").routeId("resttoamq_amqp_producer")
 			.to( "activemq://" + amqpProducerConfig.getQueueName())
 			.log("Sending to amqp")
 		.end();
