@@ -31,7 +31,7 @@ public class AMQPProducerRouteBase extends ConfigurationRoute {
 		// context().setStreamCaching(true);
 		from("direct:amqProducerRouteBase").routeId("resttoamq_amqp_producer")
 			.log("Sending to amqp")
-			.to( "activemq://" + amqpProducerConfig.getQueueName())
+			.to( "activemq:" + amqpProducerConfig.getQueueName())
 			.log("Sending to amqp 2")
 		.end();
 	}
